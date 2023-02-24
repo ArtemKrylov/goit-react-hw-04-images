@@ -1,11 +1,16 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import { GlobalStyle } from '../GlobalStyle';
 
-const App = () => {
-  return (
-    <div className="app">
-      <GlobalStyle />
-    </div>
-  );
-};
-
-export default App;
+export default class App extends Component {
+  static defaultProps = {};
+  state = {};
+  render() {
+    return (
+      <div className="app">
+        <GlobalStyle />
+      </div>
+    );
+  }
+}
