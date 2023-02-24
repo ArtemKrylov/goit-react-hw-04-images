@@ -4,18 +4,21 @@ export const theme = Object.freeze({
     grey: `#dddddd`,
     darkGrey: '#565656',
     black: '#161616',
-    accent: '#ff8000',
+    accent: '#ff006e',
   },
   media: {
     tablet: `@media screen and (min-width: 768px)`,
     desktop: `@media screen and (min-width: 1024px)`,
   },
   shadows: {
-    boxAccent: `0 1px 1px #ff6b01, 0 4px 4px #ff6b08, 1px 4px 6px #ff6b01;`,
-    boxDark: `0 1px 1px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 6%), 1px 4px 6px rgb(0 0 0 / 16%);`,
+    fontBlack: `.1px .1px #161616`,
+    fontAccent: `1px 1px #ff006e`,
+    boxAccent: `0 1px 1px #ff006e, 0 2px 3px #ff004e, 1px 3px 5px #ff005e;`,
+    boxDark: `0 1px 1px rgb(0 0 0 / 12%), 0 1px 1px rgb(0 0 0 / 6%), 1px 2px 3px rgb(0 0 0 / 16%);`,
+    boxDarkHover: `0 1px 1px rgb(0 0 0 / 12%), 0 2px 2px rgb(0 0 0 / 6%), 1px 3px 4px rgb(0 0 0 / 16%);`,
   },
-  cubic: `cubic-bezier(0.4, 0, 0.2, 1)`,
-  transitionTime: '250ms',
+  cubic: `250ms cubic-bezier(0.4, 0, 0.2, 1)`,
+  borderRadius: '5px',
   visuallyHidden: `position: absolute;
     width: 1px;
     height: 1px;
