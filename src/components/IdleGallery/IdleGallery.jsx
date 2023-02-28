@@ -25,7 +25,9 @@ export default function IdleGallery({ className, handleFigureClick }) {
                     className="idleGallery__image"
                     alt={el.query}
                   />
-                  <figcaption>{el.query}</figcaption>
+                  <figcaption className="idleGallery__figcaption">
+                    {el.query}
+                  </figcaption>
                 </figure>
               </li>
             ))}
