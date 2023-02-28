@@ -24,7 +24,7 @@ export default class ImageGallery extends Component {
 
   //there is status property in state, which correspondes the request status
   state = {
-    status: ImageGallery.STATUS.IDLE,
+    status: 'idle',
     images: [],
     pageCount: 1, //total pages for key word
     pageSelected: 1,
