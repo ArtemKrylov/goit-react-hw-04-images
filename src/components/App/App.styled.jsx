@@ -5,7 +5,7 @@ export const Container = styled.div`
   margin-right: auto;
   padding-right: 20px;
   padding-left: 20px;
-  width: 320px;
+  min-width: 320px;
 
   ${props => props.theme.media.tablet} {
     width: 768px;
@@ -15,6 +15,10 @@ export const Container = styled.div`
 
   ${props => props.theme.media.desktop} {
     width: 1024px;
+  }
+
+  ${props => props.theme.media.huge} {
+    width: 1200px;
   }
 `;
 
@@ -47,27 +51,5 @@ export const Button = styled.button`
   ${props => props.theme.media.tablet} {
     margin-left: 0;
     margin-right: 0;
-  }
-`;
-
-export const Input = styled.input`
-  margin-bottom: 15px;
-  padding: 7px;
-
-  border-radius: ${({ theme }) => theme.borderRadius};
-
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.accent};
-
-  transition: box-shadow ${({ theme }) => theme.cubic};
-  cursor: pointer;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.white};
-  }
-
-  &:hover,
-  &:focus {
-    box-shadow: ${({ theme }) => theme.shadows.boxDarkHover};
   }
 `;

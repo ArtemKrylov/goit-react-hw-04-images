@@ -9,7 +9,11 @@ export const GlobalStyle = createGlobalStyle`
 			sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-}
+	}
+
+	.ReactModal__Body--open{
+		overflow: hidden;
+	}
 
 	.visually-hidden {
 		position: absolute;
@@ -23,10 +27,14 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	.app {
-		width: 100vw;
+		width: 100%;
 		min-height: 100vh;
-		background-color: #52ACFF;
-		background-image: linear-gradient(180deg, #52ACFF 25%, #FFE32C 100%);
+		background: #06beb6;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #48b1bf, #06beb6);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #48b1bf, #06beb6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+		/* background-color: #52ACFF;
+		background-image: linear-gradient(180deg, #52ACFF 25%, #FFE32C 100%); */
 
 	}
 
@@ -49,6 +57,8 @@ export const GlobalStyle = createGlobalStyle`
 	img {
 		display: block;
 		overflow: hidden;
+		max-width: 100%;
+  	height: auto;
 	} 
 
 	li {
