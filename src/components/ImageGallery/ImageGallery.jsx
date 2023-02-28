@@ -7,6 +7,7 @@ import PaginationBar from 'components/PaginationBar';
 import Spinner from 'components/Spinner/Spinner';
 import IdleGallery from 'components/IdleGallery';
 import { ImageGalleryRejected } from './ImageGallery.styled';
+import { scrollToTop } from 'utils';
 const pixabayAPI = new PixabayAPI();
 
 export default class ImageGallery extends Component {
@@ -39,10 +40,12 @@ export default class ImageGallery extends Component {
     if (prevProps.query !== query) {
       this.setState({ pageSelected: 1 });
       this.fetchImages(query, pageSelected);
+      scrollToTop();
     }
     //if changed page
     if (prevState.pageSelected !== pageSelected) {
       this.fetchImages(query, pageSelected);
+      scrollToTop();
     }
   };
 
@@ -92,6 +95,7 @@ export default class ImageGallery extends Component {
         images: response.data.hits,
         status: ImageGallery.STATUS.RESOLVED,
       });
+      scrollToTop();
     } catch (error) {
       console.error(error);
       //request rejected - state changes to REJECTED => render rejected option
