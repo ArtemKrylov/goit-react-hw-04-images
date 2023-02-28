@@ -12,7 +12,8 @@ export default class App extends Component {
   };
 
   componentDidUpdate(_, prevState) {
-    if (prevState.query === this.state.query) {
+    const { query } = this.state;
+    if (prevState.query === query) {
       toast.error('The same query! Try a different one, please!');
       return;
     }
@@ -21,10 +22,6 @@ export default class App extends Component {
   onSearchFormSubmit = query => {
     this.setState({ query });
   };
-
-  // changePaginationOptions = pageCount => {
-  //   this.setState({ pageCount });
-  // };
 
   render() {
     const { query } = this.state;

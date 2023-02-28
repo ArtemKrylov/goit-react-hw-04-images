@@ -5,6 +5,8 @@ import ImageGalleryItem from 'components/ImageGalleryItem';
 import PixabayAPI from 'API/pixabayAPI';
 import PaginationBar from 'components/PaginationBar';
 import Spinner from 'components/Spinner/Spinner';
+import IdleGallery from 'components/IdleGallery';
+import { ImageGalleryRejected } from './ImageGallery.styled';
 const pixabayAPI = new PixabayAPI();
 
 export default class ImageGallery extends Component {
@@ -33,15 +35,26 @@ export default class ImageGallery extends Component {
   componentDidUpdate = async (prevProps, prevState) => {
     const { query } = this.props;
     const { pageSelected } = this.state;
-
+    //if changed query
     if (prevProps.query !== query) {
       this.setState({ pageSelected: 1 });
+      this.fetchImages(query, pageSelected);
     }
-    //if changed query and page
-    if (prevProps.query !== query || prevState.pageSelected !== pageSelected) {
+    //if changed page
+    if (prevState.pageSelected !== pageSelected) {
       this.fetchImages(query, pageSelected);
     }
   };
+
+  //adding to localstorage queriesList key which value is [{query: 'query'  , image: 'url'}, ...]
+  addQueryToLocalStorage(query, image) {
+    let queriesList = localStorage.getItem('queriesList');
+    queriesList = queriesList ? JSON.parse(queriesList) : [];
+    //if in there is such query in localstorage - don`t add it
+    if (queriesList.find(el => el.query === query)) return;
+    queriesList.push({ query, image });
+    localStorage.setItem('queriesList', JSON.stringify(queriesList));
+  }
 
   async fetchImages(query, pageSelected) {
     try {
@@ -57,6 +70,7 @@ export default class ImageGallery extends Component {
           response.data.totalHits / ImageGallery.imagesPerPage
         ),
       });
+      this.addQueryToLocalStorage(query, response.data.hits[0].previewURL);
     } catch (error) {
       console.error(error);
       //request rejected - state changes to REJECTED => render rejected option
@@ -85,6 +99,10 @@ export default class ImageGallery extends Component {
     }
   };
 
+  handleFigureClick = query => {
+    this.fetchImages(query, 1);
+  };
+
   render() {
     const { images, status, pageCount } = this.state;
     const { className } = this.props;
@@ -93,7 +111,10 @@ export default class ImageGallery extends Component {
     if (status === ImageGallery.STATUS.IDLE) {
       return (
         <Section className={className}>
-          <ul className="imageGallery__list">Search something</ul>
+          <IdleGallery
+            className="idleGallery"
+            handleFigureClick={this.handleFigureClick}
+          />
         </Section>
       );
     }
@@ -144,9 +165,9 @@ export default class ImageGallery extends Component {
     if (status === ImageGallery.STATUS.REJECTED) {
       return (
         <Section className={className}>
-          <ul className="imageGallery__list">
+          <ImageGalleryRejected className="imageGallery__rejected">
             There are no images by your query
-          </ul>
+          </ImageGalleryRejected>
         </Section>
       );
     }

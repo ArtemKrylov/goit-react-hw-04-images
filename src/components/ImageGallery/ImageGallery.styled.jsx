@@ -16,3 +16,10 @@ const ImageGalleryStyled = styled(ImageGallery)`
   }
 `;
 export default ImageGalleryStyled;
+
+export const ImageGalleryRejected = styled.div`
+  text-align: center;
+  font-weight: 700;
+  text-shadow: ${({ theme }) => theme.shadows.fontBlack};
+  color: ${({ theme }) => theme.colors.accent};
+`;
