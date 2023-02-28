@@ -26,7 +26,7 @@ export default function IdleGallery({ className, handleFigureClick }) {
                     alt={el.query}
                   />
                   <figcaption className="idleGallery__figcaption">
-                    {el.query}
+                    {el.query.toLowerCase()}
                   </figcaption>
                 </figure>
               </li>
