@@ -14,13 +14,6 @@ const pixabayAPI = new PixabayAPI();
 
 export default class App extends Component {
   static imagesPerPage = 12;
-  //static obj for 'state machine'
-  // static STATUS = {
-  //   IDLE: 'idle',
-  //   PENDING: 'pending',
-  //   RESOLVED: 'resolved',
-  //   REJECTED: 'rejected',
-  // };
 
   state = {
     query: '',
@@ -32,13 +25,7 @@ export default class App extends Component {
 
   componentDidUpdate(_, prevState) {
     const { query, pageSelected } = this.state;
-    // console.log('pr q: ', prevState.query, 'q: ', query);
-    // if (prevState.query === query && prevState.pageSelected === pageSelected) {
-    //   console.log('app same query');
-    //   console.log('pr q: ', prevState.query, 'q: ', query);
-    //   toast.error('The same query! Try a different one, please!');
-    //   return;
-    // }
+
     //if changed query
     if (prevState.query !== query) {
       this.setState({ pageSelected: 1 });
