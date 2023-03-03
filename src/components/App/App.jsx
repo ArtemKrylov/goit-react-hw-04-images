@@ -8,7 +8,7 @@ import ImageGallery from 'components/ImageGallery';
 import PixabayAPI from 'API/pixabayAPI';
 import { scrollToTop } from 'utils';
 import PaginationBar from 'components/PaginationBar';
-import { STATUS } from '../../constants/imageGalleryStatus';
+import { STATUS } from 'constants';
 
 const pixabayAPI = new PixabayAPI();
 

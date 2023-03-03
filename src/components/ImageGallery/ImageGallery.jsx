@@ -7,8 +7,7 @@ import ImageGalleryItem from 'components/ImageGalleryItem';
 import Spinner from 'components/Spinner/Spinner';
 import IdleGallery from 'components/IdleGallery';
 import { ImageGalleryRejected } from './ImageGallery.styled';
-import { STATUS } from '../../constants/imageGalleryStatus';
-
+import { STATUS } from 'constants';
 // import { scrollToTop } from 'utils';
 // const pixabayAPI = new PixabayAPI();
 
