@@ -26,9 +26,8 @@ export default function Modal({
         openNextImage();
       }
     };
-    console.log('adding keydown');
+    //keydown event listener
     document.querySelector('body').addEventListener('keydown', handleKeyDown);
-    console.log('added event listener');
     return () => {
       document
         .querySelector('body')
@@ -36,10 +35,16 @@ export default function Modal({
     };
   }, [openNextImage, openPreviousImage, closeModal]);
 
+  function onOverlayClick(evt) {
+    if (![...evt.target.classList].includes('modal__overlay')) return;
+    closeModal();
+  }
+
   return createPortal(
     <ModalStyled
       className={`modal__overlay ${className}`}
       contentLabel={contentLabel}
+      onClick={onOverlayClick}
     >
       <div className="modal__window">{children}</div>
     </ModalStyled>,
