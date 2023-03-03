@@ -10,6 +10,7 @@ export class Searchbar extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     className: PropTypes.string.isRequired,
+    appQuery: PropTypes.string.isRequired,
   };
 
   state = {
@@ -19,8 +20,15 @@ export class Searchbar extends Component {
   handleFormSubmit = evt => {
     const { onSubmit } = this.props;
     const { query } = this.state;
+    const { appQuery } = this.props;
     evt.preventDefault();
     if (!this.checkQuery(query)) return;
+
+    if (appQuery === query) {
+      toast.error('The same query! Try a different one, please!');
+      return;
+    }
+
     onSubmit(query);
     localStorage.setItem('query', '');
     this.resetForm();
