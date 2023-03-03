@@ -88,7 +88,6 @@ export default class App extends Component {
 
   handlePageClick = async ({ selected }) => {
     const { query } = this.state;
-    console.log('pagination query: ', query);
     const page = selected + 1;
     if (page === this.state.page) return;
     try {
