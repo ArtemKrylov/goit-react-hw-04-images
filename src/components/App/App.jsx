@@ -26,6 +26,7 @@ export default function App() {
   useEffect(() => {
     fetchImages(query, pageSelected);
     scrollToTop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, pageSelected]);
 
   //for pagination - if new query - show first page
