@@ -20,6 +20,7 @@ export const theme = Object.freeze({
     boxDarkHover: `0 1px 1px rgb(0 0 0 / 12%), 0 2px 2px rgb(0 0 0 / 6%), 1px 3px 4px rgb(0 0 0 / 16%);`,
   },
   cubic: `250ms cubic-bezier(0.4, 0, 0.2, 1)`,
+  modalTimeOut: 250,
   borderRadius: '5px',
   visuallyHidden: `position: absolute;
     width: 1px;

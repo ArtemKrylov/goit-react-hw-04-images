@@ -10,6 +10,7 @@ import { scrollToTop } from 'utils';
 import PaginationBar from 'components/PaginationBar';
 import { STATUS } from 'constants';
 import ImageModal from 'components/ImageModal';
+import { theme } from 'constants';
 
 const pixabayAPI = new PixabayAPI();
 
@@ -104,13 +105,19 @@ export default class App extends Component {
 
   //for modal window
   openModal = modalImg => {
-    this.setState({ modalImg });
-    document.querySelector('.searchbar').style.position = 'static';
+    setTimeout(() => {
+      this.setState({ modalImg });
+      document.querySelector('.searchbar').style.position = 'static';
+      document.querySelector('body').classList.add('body--modal-open');
+    }, theme.modalTimeOut);
   };
 
   closeModal = () => {
-    this.setState({ modalImg: {} });
-    document.querySelector('.searchbar').style.position = 'sticky';
+    setTimeout(() => {
+      this.setState({ modalImg: {} });
+      document.querySelector('.searchbar').style.position = 'sticky';
+      document.querySelector('body').classList.remove('body--modal-open');
+    }, theme.modalTimeOut);
   };
 
   //for modal window to open previous image

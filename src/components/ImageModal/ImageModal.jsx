@@ -1,4 +1,5 @@
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
+import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import defaultImage from '../../img/default-image.jpg';
 import {
@@ -6,28 +7,6 @@ import {
   NextModalBtnIcon,
   PrevModalBtnIcon,
 } from './ImageModal.styled';
-
-const customStyles = {
-  content: {
-    position: 'relative',
-    outline: 'none',
-    maxHeight: '80%',
-    maxWidth: '80%',
-    overflow: 'hidden',
-    border: `2px solid #ff6a00`,
-  },
-  overlay: {
-    height: '100vh',
-    maxHeight: '100vh',
-    width: '100vw',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#000000e0',
-  },
-};
-
-Modal.setAppElement('#root');
 
 export default function ImageModal({
   isModalOpen,
@@ -40,15 +19,11 @@ export default function ImageModal({
 }) {
   return (
     <Modal
-      isOpen={isModalOpen}
       className={className}
-      // overlayClassName={'imageModal__overlay'}
-      style={customStyles}
       contentLabel="Image Modal"
-      shouldCloseOnOverlayClick={true}
-      onRequestClose={closeModal}
-      closeTimeoutMS={250}
-      preventScroll={true}
+      openNextImage={openNextImage}
+      openPreviousImage={openPreviousImage}
+      closeModal={closeModal}
     >
       <img
         src={largeImageURL ?? defaultImage}

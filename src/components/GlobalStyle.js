@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
 		-moz-osx-font-smoothing: grayscale;
 	}
 
-	.ReactModal__Body--open{
+	.body--modal-open{
 		overflow: hidden;
 	}
 
