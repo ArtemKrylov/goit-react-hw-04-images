@@ -9,6 +9,7 @@ import PixabayAPI from 'API/pixabayAPI';
 import { scrollToTop } from 'utils';
 import PaginationBar from 'components/PaginationBar';
 import { STATUS } from 'constants';
+import ImageModal from 'components/ImageModal';
 
 const pixabayAPI = new PixabayAPI();
 
@@ -21,6 +22,7 @@ export default class App extends Component {
     pageCount: 1, //total pages for key word
     pageSelected: 1,
     status: STATUS.IDLE,
+    modalImg: {},
   };
 
   componentDidUpdate(_, prevState) {
@@ -73,6 +75,7 @@ export default class App extends Component {
     localStorage.setItem('queriesList', JSON.stringify(queriesList));
   }
 
+  //for pagination page change
   handlePageClick = async ({ selected }) => {
     const { query } = this.state;
     const page = selected + 1;
@@ -93,13 +96,42 @@ export default class App extends Component {
     }
   };
 
+  //for idle gallery previous searches
   handleFigureClick = query => {
     this.setState({ query });
     this.fetchImages(query, 1);
   };
 
+  //for modal window
+  openModal = modalImg => {
+    this.setState({ modalImg });
+    document.querySelector('.searchbar').style.position = 'static';
+  };
+
+  closeModal = () => {
+    this.setState({ modalImg: {} });
+    document.querySelector('.searchbar').style.position = 'sticky';
+  };
+
+  //for modal window to open previous image
+  openPreviousImage = () => {
+    const { images, modalImg } = this.state;
+    const prevImage =
+      images[images.indexOf(modalImg) - 1] ?? images[images.length - 1];
+    this.setState({ modalImg: prevImage });
+  };
+
+  //for modal window to open next image
+  openNextImage = () => {
+    const { images, modalImg } = this.state;
+    const nextImage = images[images.indexOf(modalImg) + 1] ?? images[0];
+    this.setState({ modalImg: nextImage });
+  };
+
   render() {
-    const { pageCount, images, status, query } = this.state;
+    const { pageCount, images, status, query, modalImg } = this.state;
+    const isModalOpen = Object.keys(modalImg).length !== 0;
+
     return (
       <div className="app">
         <GlobalStyle />
@@ -114,6 +146,7 @@ export default class App extends Component {
           handleFigureClick={this.handleFigureClick}
           images={images}
           status={status}
+          openModal={this.openModal}
         />
 
         {/* Pagination */}
@@ -124,7 +157,20 @@ export default class App extends Component {
             className="paginationBar"
           />
         )}
+        {/*Modal*/}
+        {isModalOpen && (
+          <ImageModal
+            largeImageURL={modalImg.largeImageURL}
+            tags={modalImg.tags}
+            isModalOpen={isModalOpen}
+            closeModal={this.closeModal}
+            className="imageGallery__modal"
+            openNextImage={this.openNextImage}
+            openPreviousImage={this.openPreviousImage}
+          />
+        )}
 
+        {/* For notifications using ReactToastify library */}
         <ToastContainer theme="colored" autoClose={2000} />
       </div>
     );

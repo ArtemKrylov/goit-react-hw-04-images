@@ -1,7 +1,11 @@
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import defaultImage from '../../img/default-image.jpg';
-import { CloseModalBtnIcon } from './ImageModal.styled';
+import {
+  CloseModalBtnIcon,
+  NextModalBtnIcon,
+  PrevModalBtnIcon,
+} from './ImageModal.styled';
 
 const customStyles = {
   content: {
@@ -15,6 +19,7 @@ const customStyles = {
   overlay: {
     height: '100vh',
     maxHeight: '100vh',
+    width: '100vw',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -30,6 +35,8 @@ export default function ImageModal({
   tags,
   closeModal,
   className,
+  openNextImage,
+  openPreviousImage,
 }) {
   return (
     <Modal
@@ -50,6 +57,20 @@ export default function ImageModal({
       />
       <button
         type="button"
+        onClick={openNextImage}
+        className="imageModal__nav-btn imageModal__prev-btn"
+      >
+        <PrevModalBtnIcon />
+      </button>
+      <button
+        type="button"
+        onClick={openPreviousImage}
+        className="imageModal__nav-btn imageModal__next-btn"
+      >
+        <NextModalBtnIcon />
+      </button>
+      <button
+        type="button"
         onClick={closeModal}
         className="imageModal__close-btn"
       >
@@ -60,9 +81,11 @@ export default function ImageModal({
 }
 
 ImageModal.propTypes = {
-  largeImageURL: PropTypes.string.isRequired,
-  tags: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string,
+  tags: PropTypes.string,
   isModalOpen: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   className: PropTypes.string.isRequired,
+  openPreviousImage: PropTypes.func.isRequired,
+  openNextImage: PropTypes.func.isRequired,
 };

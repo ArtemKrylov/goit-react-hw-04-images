@@ -11,6 +11,7 @@ export default function ImageGallery({
   images,
   status,
   handleFigureClick,
+  openModal,
 }) {
   //gallery on first load
   if (status === STATUS.IDLE) {
@@ -50,6 +51,7 @@ export default function ImageGallery({
                 key={image.id}
                 image={image}
                 className="imageGallery__item"
+                openModal={openModal}
               />
             ))}
           </ul>
@@ -75,4 +77,5 @@ ImageGallery.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   status: PropTypes.string.isRequired,
   handleFigureClick: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
 };
