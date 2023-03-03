@@ -5,16 +5,17 @@ import { createPortal } from 'react-dom';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export default function Modal(
+export default function Modal({
   children,
   className,
   contentLabel,
   openNextImage,
   openPreviousImage,
-  closeModal
-) {
+  closeModal,
+}) {
   useEffect(() => {
     const handleKeyDown = ({ key }) => {
+      console.log('key', key);
       if (key === 'Escape') {
         closeModal();
       }
@@ -25,9 +26,14 @@ export default function Modal(
         openNextImage();
       }
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return window.removeEventListener('keydown', handleKeyDown);
+    console.log('adding keydown');
+    document.querySelector('body').addEventListener('keydown', handleKeyDown);
+    console.log('added event listener');
+    return () => {
+      document
+        .querySelector('body')
+        .removeEventListener('keydown', handleKeyDown);
+    };
   }, [openNextImage, openPreviousImage, closeModal]);
 
   return createPortal(

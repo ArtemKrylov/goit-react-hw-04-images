@@ -6,12 +6,9 @@ import { isStringEmpty } from 'utils';
 import { ButtonSearch, Input } from 'components/Searchbar';
 import { useState } from 'react';
 
-export function Searchbar(onSubmit, className, appQuery) {
+export function Searchbar({ onSubmit, className, appQuery }) {
   const [query, setQuery] = useState(localStorage.getItem('query') ?? '');
 
-  // state = {
-  //   query: localStorage.getItem('query') ?? '',
-  // };
   const checkQuery = query => {
     if (isStringEmpty(query)) {
       toast.error('Please write a query first');

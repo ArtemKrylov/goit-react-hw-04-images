@@ -12,8 +12,9 @@ import { STATUS } from 'constants';
 import ImageModal from 'components/ImageModal';
 import { theme } from 'constants';
 
+const pixabayAPI = new PixabayAPI();
+
 export default function App() {
-  const pixabayAPI = new PixabayAPI();
   const imagesPerPage = 12;
 
   const [query, setQuery] = useState('');
@@ -24,9 +25,41 @@ export default function App() {
   const [modalImg, setModalImg] = useState({});
 
   useEffect(() => {
+    //adding to localstorage queriesList key which value is [{query: 'query'  , image: 'url'}, ...]
+    //for previous searches
+    function addQueryToLocalStorage(query, image) {
+      let queriesList = localStorage.getItem('queriesList');
+      queriesList = queriesList ? JSON.parse(queriesList) : [];
+      //if in there is such query in localstorage - don`t add it
+      if (queriesList.find(el => el.query === query)) return;
+      queriesList.push({ query, image });
+      localStorage.setItem('queriesList', JSON.stringify(queriesList));
+    }
+
+    async function fetchImages(fetchQuery, selectedPage) {
+      try {
+        //while fetching
+        setStatus(STATUS.PENDING);
+        const response = await pixabayAPI.fetchImagesByKey(
+          fetchQuery,
+          selectedPage
+        );
+
+        //request resolved
+        setImages(response.data.hits);
+        setStatus(STATUS.RESOLVED);
+        setPageCount(Math.ceil(response.data.totalHits / imagesPerPage));
+        addQueryToLocalStorage(fetchQuery, response.data.hits[0].previewURL);
+      } catch (error) {
+        console.error(error);
+        //request rejected - state changes to REJECTED => render rejected option
+        setStatus(STATUS.REJECTED);
+      }
+    }
+
+    if (query === '') return;
     fetchImages(query, pageSelected);
     scrollToTop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, pageSelected]);
 
   //for pagination - if new query - show first page
@@ -36,37 +69,6 @@ export default function App() {
 
   function onSearchFormSubmit(newQuery) {
     setQuery(newQuery);
-  }
-
-  async function fetchImages(fetchQuery, selectedPage) {
-    try {
-      //while fetching
-      setStatus(STATUS.PENDING);
-      const response = await pixabayAPI.fetchImagesByKey(
-        fetchQuery,
-        selectedPage
-      );
-
-      //request resolved
-      setImages(response.data.hits);
-      setStatus(STATUS.RESOLVED);
-      setPageCount(Math.ceil(response.data.totalHits / imagesPerPage));
-      addQueryToLocalStorage(fetchQuery, response.data.hits[0].previewURL);
-    } catch (error) {
-      console.error(error);
-      //request rejected - state changes to REJECTED => render rejected option
-      setStatus(STATUS.REJECTED);
-    }
-  }
-
-  //adding to localstorage queriesList key which value is [{query: 'query'  , image: 'url'}, ...]
-  function addQueryToLocalStorage(query, image) {
-    let queriesList = localStorage.getItem('queriesList');
-    queriesList = queriesList ? JSON.parse(queriesList) : [];
-    //if in there is such query in localstorage - don`t add it
-    if (queriesList.find(el => el.query === query)) return;
-    queriesList.push({ query, image });
-    localStorage.setItem('queriesList', JSON.stringify(queriesList));
   }
 
   //for pagination page change
@@ -90,7 +92,6 @@ export default function App() {
   //for idle gallery previous searches
   function handleFigureClick(newQuery) {
     setQuery(newQuery);
-    fetchImages(query, 1);
   }
 
   //for modal window
