@@ -29,6 +29,10 @@ const PaginationBarStyled = styled(PaginationBar)`
       color: ${({ theme }) => theme.colors.accent};
     }
 
+    &.disabled {
+      ${({ theme }) => theme.visuallyHidden};
+    }
+
     &:hover,
     &:focus {
       border: 1px solid ${({ theme }) => theme.colors.white};
