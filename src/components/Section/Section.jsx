@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from 'components/App/App.styled';
 
-export const Section = ({ title, className = 'section', children }) => {
+export function Section({ title, className = 'section', children }) {
   return (
     <section className={`section ${className}`}>
       <Container className="container">
@@ -13,7 +13,7 @@ export const Section = ({ title, className = 'section', children }) => {
       </Container>
     </section>
   );
-};
+}
 
 Section.propTypes = {
   title: PropTypes.string,
