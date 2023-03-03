@@ -9,7 +9,6 @@ import {
 } from './ImageModal.styled';
 
 export default function ImageModal({
-  isModalOpen,
   largeImageURL,
   tags,
   closeModal,
@@ -58,7 +57,6 @@ export default function ImageModal({
 ImageModal.propTypes = {
   largeImageURL: PropTypes.string,
   tags: PropTypes.string,
-  isModalOpen: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   className: PropTypes.string.isRequired,
   openPreviousImage: PropTypes.func.isRequired,
