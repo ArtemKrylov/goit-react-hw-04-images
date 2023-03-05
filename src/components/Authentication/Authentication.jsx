@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 import Modal from 'components/Modal';
@@ -12,19 +13,32 @@ import { CloseAuth } from './Authentication.styled';
 import { Button } from 'components/App/App.styled';
 import { Input } from 'components/Searchbar';
 import { useUser } from 'utils/userContext';
+import { db } from 'utils/firebaseConfig';
 
 export default function Authentification({ className, closeAuth }) {
   const [isSignedUpForm, setIsSignedUpForm] = useState(false);
-  const { logIn } = useUser();
+
+  const { logIn, setUserId, setUserName } = useUser();
 
   async function register(email, name, password) {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userRef = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const registeredUserId = userRef.user.uid;
       logIn(name, email);
       closeAuth();
       toast.success(
         `${name}, you've successfully registered with email: ${email}`
       );
+      setUserId(registeredUserId);
+      await setDoc(doc(db, 'users', registeredUserId), {
+        name,
+        email,
+        registrationDate: new Date(),
+      });
     } catch (error) {
       closeAuth();
       toast.error(error.message);
@@ -34,10 +48,19 @@ export default function Authentification({ className, closeAuth }) {
   async function authLogin(email, password) {
     try {
       //todo get name from firebase
-      const name = '';
-      await signInWithEmailAndPassword(auth, email, password);
+
+      const docRef = await signInWithEmailAndPassword(auth, email, password);
+      const loggedUserId = docRef.user.uid;
+      setUserId(loggedUserId);
+
+      const userData = await getDoc(doc(db, `users`, loggedUserId));
+      const name = userData.data().name;
+      setUserName(name);
       logIn(name, email);
       closeAuth();
+      await updateDoc(doc(db, `users`, loggedUserId), {
+        lastLogin: new Date(),
+      });
       toast.success(
         `${name}, you've successfully logged in with email: ${email}`
       );

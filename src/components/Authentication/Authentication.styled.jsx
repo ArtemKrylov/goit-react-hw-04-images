@@ -43,6 +43,7 @@ const AuthentificationStyled = styled(Authentification)`
   }
 
   & .auth__input {
+    max-width: 100%;
     margin-bottom: 15px;
     border: 1px solid ${({ theme }) => theme.colors.white};
     transition: box-shadow ${({ theme }) => theme.cubic};

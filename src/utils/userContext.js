@@ -14,6 +14,7 @@ export function UserProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('User');
   const [userEmail, setUserEmail] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   function logIn(name, email) {
     setIsLoggedIn(true);
@@ -25,6 +26,7 @@ export function UserProvider({ children }) {
     setIsLoggedIn(false);
     setUserName(null);
     setUserEmail(null);
+    setUserId(null);
     try {
       await signOut(auth);
       toast.success('Signed out!');
@@ -43,6 +45,8 @@ export function UserProvider({ children }) {
         setUserName,
         logIn,
         logOut,
+        userId,
+        setUserId,
       }}
     >
       {children}
