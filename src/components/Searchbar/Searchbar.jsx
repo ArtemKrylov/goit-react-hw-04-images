@@ -3,11 +3,26 @@ import { toast } from 'react-toastify';
 import { MdOutlineImageSearch } from 'react-icons/md';
 
 import { isStringEmpty } from 'utils';
-import { ButtonSearch, Input } from 'components/Searchbar';
+import {
+  Auth,
+  ButtonSearch,
+  Input,
+  LogInIcon,
+  LogOutIcon,
+} from 'components/Searchbar';
 import { useState } from 'react';
 
-export function Searchbar({ onSubmit, className, appQuery }) {
+import { useUser } from 'utils/userContext';
+
+export function Searchbar({
+  onSubmit,
+  className,
+  appQuery,
+  isLogged,
+  openAuth,
+}) {
   const [query, setQuery] = useState(localStorage.getItem('query') ?? '');
+  const { isLoggedIn, userName, logOut } = useUser();
 
   const checkQuery = query => {
     if (isStringEmpty(query)) {
@@ -44,26 +59,39 @@ export function Searchbar({ onSubmit, className, appQuery }) {
   return (
     <header className={className}>
       <form onSubmit={handleFormSubmit} className="searchbar__form">
-        <ButtonSearch type="submit" className="searchbar__button">
-          <MdOutlineImageSearch
-            fill="#fff"
-            width="20"
-            height="20"
-            className="searchbar__icon"
-          />
-          <span className="button-label">Search</span>
-        </ButtonSearch>
+        <div className="searchbar__inputContainer">
+          <ButtonSearch type="submit" className="searchbar__button">
+            <MdOutlineImageSearch
+              fill="#fff"
+              width="20"
+              height="20"
+              className="searchbar__icon"
+            />
+            <span className="button-label">Search</span>
+          </ButtonSearch>
 
-        <Input
-          onChange={handleInputChange}
-          value={query}
-          name="searchQuery"
-          className="searchbar__input"
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
+          <Input
+            onChange={handleInputChange}
+            value={query}
+            name="searchQuery"
+            className="searchbar__input"
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </div>
+
+        {isLoggedIn ? (
+          <Auth>
+            <p className="searchbar__userName">Hello, {userName} !</p>
+            <LogOutIcon onClick={logOut} />
+          </Auth>
+        ) : (
+          <Auth onClick={openAuth}>
+            <LogInIcon />
+          </Auth>
+        )}
       </form>
     </header>
   );
@@ -72,4 +100,6 @@ Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   className: PropTypes.string.isRequired,
   appQuery: PropTypes.string.isRequired,
+  isLogged: PropTypes.bool.isRequired,
+  openAuth: PropTypes.func.isRequired,
 };

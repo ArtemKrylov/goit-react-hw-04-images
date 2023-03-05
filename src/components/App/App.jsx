@@ -11,6 +11,7 @@ import PaginationBar from 'components/PaginationBar';
 import { STATUS } from 'constants';
 import ImageModal from 'components/ImageModal';
 import { theme } from 'constants';
+import Authentification from 'components/Authentication';
 
 const pixabayAPI = new PixabayAPI();
 
@@ -23,6 +24,8 @@ export default function App() {
   const [pageSelected, setPageSelected] = useState(1);
   const [status, setStatus] = useState(STATUS.IDLE);
   const [modalImg, setModalImg] = useState({});
+  // const [authData, setAuthData] = useState({ login: '', password: '' });
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   useEffect(() => {
     //adding to localstorage queriesList key which value is [{query: 'query'  , image: 'url'}, ...]
@@ -94,20 +97,28 @@ export default function App() {
     setQuery(newQuery);
   }
 
-  //for modal window
-  function openModal(newModalImg) {
-    setTimeout(() => {
-      setModalImg(newModalImg);
-      document.querySelector('.searchbar').style.position = 'static';
-      document.querySelector('body').classList.add('body--modal-open');
-    }, theme.modalTimeOut);
+  function openModal() {
+    document.querySelector('.searchbar').style.position = 'static';
+    document.querySelector('body').classList.add('body--modal-open');
   }
 
   function closeModal() {
+    document.querySelector('.searchbar').style.position = 'sticky';
+    document.querySelector('body').classList.remove('body--modal-open');
+  }
+
+  //for image modal window
+  function openImgModal(newModalImg) {
+    setTimeout(() => {
+      setModalImg(newModalImg);
+      openModal();
+    }, theme.modalTimeOut);
+  }
+
+  function closeImgModal() {
     setTimeout(() => {
       setModalImg({});
-      document.querySelector('.searchbar').style.position = 'sticky';
-      document.querySelector('body').classList.remove('body--modal-open');
+      closeModal();
     }, theme.modalTimeOut);
   }
 
@@ -124,6 +135,16 @@ export default function App() {
     setModalImg(nextImage);
   }
 
+  function openAuth() {
+    openModal();
+    setIsAuthOpen(true);
+  }
+
+  function closeAuth() {
+    closeModal();
+    setIsAuthOpen(false);
+  }
+
   const isModalOpen = Object.keys(modalImg).length !== 0;
 
   return (
@@ -133,13 +154,15 @@ export default function App() {
         onSubmit={onSearchFormSubmit}
         className="searchbar"
         appQuery={query}
+        openAuth={openAuth}
+        isLogged={isAuthOpen}
       />
       <ImageGallery
         className="imageGallery"
         handleFigureClick={handleFigureClick}
         images={images}
         status={status}
-        openModal={openModal}
+        openModal={openImgModal}
       />
 
       {/* Pagination */}
@@ -156,11 +179,15 @@ export default function App() {
           largeImageURL={modalImg.largeImageURL}
           tags={modalImg.tags}
           isModalOpen={isModalOpen}
-          closeModal={closeModal}
+          closeModal={closeImgModal}
           className="imageGallery__modal"
           openNextImage={openNextImage}
           openPreviousImage={openPreviousImage}
         />
+      )}
+
+      {isAuthOpen && (
+        <Authentification className="auth" closeAuth={closeAuth} />
       )}
 
       {/* For notifications using ReactToastify library */}

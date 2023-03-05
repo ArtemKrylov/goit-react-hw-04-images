@@ -19,5 +19,11 @@ export const ModalStyled = styled.div`
     max-width: 80%;
     overflow: hidden;
     border: 2px solid ${({ theme }) => theme.colors.accent};
+    border-radius: ${({ theme }) => theme.borderRadius};
+
+    &:hover,
+    &:focus {
+      box-shadow: ${({ theme }) => theme.shadows.boxAccent};
+    }
   }
 `;

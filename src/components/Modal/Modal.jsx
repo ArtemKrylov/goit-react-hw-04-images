@@ -15,25 +15,24 @@ export default function Modal({
 }) {
   useEffect(() => {
     const handleKeyDown = ({ key }) => {
-      console.log('key', key);
       if (key === 'Escape') {
         closeModal();
       }
-      if (key === 'ArrowLeft') {
-        openPreviousImage();
-      }
-      if (key === 'ArrowRight') {
-        openNextImage();
+      if (className.includes('imageGallery__modal')) {
+        if (key === 'ArrowLeft') {
+          openPreviousImage();
+        }
+        if (key === 'ArrowRight') {
+          openNextImage();
+        }
       }
     };
     //keydown event listener
-    document.querySelector('body').addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      document
-        .querySelector('body')
-        .removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [openNextImage, openPreviousImage, closeModal]);
+  }, [openNextImage, openPreviousImage, closeModal, className]);
 
   function onOverlayClick(evt) {
     if (![...evt.target.classList].includes('modal__overlay')) return;
@@ -55,7 +54,7 @@ Modal.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   contentLabel: PropTypes.string,
-  openNextImage: PropTypes.func.isRequired,
-  openPreviousImage: PropTypes.func.isRequired,
+  openNextImage: PropTypes.func,
+  openPreviousImage: PropTypes.func,
   closeModal: PropTypes.func.isRequired,
 };

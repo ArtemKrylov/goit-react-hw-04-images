@@ -4,11 +4,14 @@ import { ThemeProvider } from 'styled-components';
 
 import App from 'components/App';
 import { theme } from './constants/theme';
+import { UserProvider } from 'utils/userContext';
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

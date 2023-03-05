@@ -32,16 +32,20 @@ export const Button = styled.button`
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: ${({ theme }) => theme.shadows.boxDark};
   color: ${({ theme }) => theme.colors.accent};
+  background-color: ${({ theme }) => theme.colors.white};
   text-shadow: ${({ theme }) => theme.shadows.fontAccent};
 
   transition: box-shadow ${({ theme }) => theme.cubic},
-    transform ${({ theme }) => theme.cubic};
+    transform ${({ theme }) => theme.cubic}, color ${({ theme }) => theme.cubic},
+    background-color ${({ theme }) => theme.cubic};
 
   &:hover,
   &:focus,
   &:active {
     transform: translate(1px, 1px);
     box-shadow: ${({ theme }) => theme.shadows.boxAccent};
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.accent};
   }
 
   &:active {
