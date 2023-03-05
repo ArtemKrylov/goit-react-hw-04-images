@@ -98,6 +98,10 @@ export const Input = styled.input`
   &:focus {
     box-shadow: ${({ theme }) => theme.shadows.boxDarkHover};
   }
+
+  ${({ theme }) => theme.media.tablet} {
+    width: 600px;
+  }
 `;
 
 export const LogInIcon = styled(AiOutlineLogin)`
