@@ -6,6 +6,20 @@ import ImageModal from './ImageModal';
 const ImageModalStyled = styled(ImageModal)`
   & .imageModal__image {
     object-fit: cover;
+    min-width: 300px;
+    min-height: 300px;
+    background: #06beb59d;
+    background: linear-gradient(to right, #48b1bfb2, #06beb593);
+
+    ${({ theme }) => theme.media.tablet} {
+      min-width: 450px;
+      min-height: 450px;
+    }
+
+    ${({ theme }) => theme.media.desktop} {
+      min-width: 500px;
+      min-height: 500px;
+    }
   }
 
   & .imageModal__close-btn {

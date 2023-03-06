@@ -10,8 +10,7 @@ import { scrollToTop } from 'utils';
 import PaginationBar from 'components/PaginationBar';
 import { STATUS } from 'constants';
 import ImageModal from 'components/ImageModal';
-import { theme } from 'constants';
-import Authentification from 'components/Authentication';
+import Authentication from 'components/Authentication';
 
 const pixabayAPI = new PixabayAPI();
 
@@ -24,7 +23,6 @@ export default function App() {
   const [pageSelected, setPageSelected] = useState(1);
   const [status, setStatus] = useState(STATUS.IDLE);
   const [modalImg, setModalImg] = useState({});
-  // const [authData, setAuthData] = useState({ login: '', password: '' });
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   useEffect(() => {
@@ -51,7 +49,12 @@ export default function App() {
         //request resolved
         setImages(response.data.hits);
         setStatus(STATUS.RESOLVED);
-        setPageCount(Math.ceil(response.data.totalHits / imagesPerPage));
+        const fetchedPageCount = Math.ceil(
+          response.data.totalHits / imagesPerPage
+        );
+        if (pageCount !== fetchedPageCount) {
+          setPageCount(fetchedPageCount);
+        }
         addQueryToLocalStorage(fetchQuery, response.data.hits[0].previewURL);
       } catch (error) {
         console.error(error);
@@ -63,12 +66,7 @@ export default function App() {
     if (query === '') return;
     fetchImages(query, pageSelected);
     scrollToTop();
-  }, [query, pageSelected]);
-
-  //for pagination - if new query - show first page
-  useEffect(() => {
-    setPageSelected(1);
-  }, [query]);
+  }, [query, pageSelected, pageCount]);
 
   function onSearchFormSubmit(newQuery) {
     setQuery(newQuery);
@@ -78,18 +76,7 @@ export default function App() {
   async function handlePageClick({ selected }) {
     const page = selected + 1;
     if (page === pageSelected) return;
-    try {
-      const response = await pixabayAPI.fetchImagesByKey(query, selected + 1);
-
-      //request resolved
-      setImages(response.data.hits);
-      setStatus(STATUS.RESOLVED);
-      scrollToTop();
-    } catch (error) {
-      console.error(error);
-      //request rejected - state changes to REJECTED => render rejected option
-      setStatus(STATUS.REJECTED);
-    }
+    setPageSelected(page);
   }
 
   //for idle gallery previous searches
@@ -97,29 +84,25 @@ export default function App() {
     setQuery(newQuery);
   }
 
-  function openModal() {
-    document.querySelector('.searchbar').style.position = 'static';
-    document.querySelector('body').classList.add('body--modal-open');
-  }
-
-  function closeModal() {
-    document.querySelector('.searchbar').style.position = 'sticky';
-    document.querySelector('body').classList.remove('body--modal-open');
+  //for all modal windows - depending opened/closed - controls searchbar position and body styles
+  function toggleModal() {
+    if (isAuthOpen || Object.keys(modalImg).length > 0) {
+      document.querySelector('.searchbar').style.position = 'sticky';
+    } else {
+      document.querySelector('.searchbar').style.position = 'static';
+    }
+    document.querySelector('body').classList.toggle('body--modal-open');
   }
 
   //for image modal window
   function openImgModal(newModalImg) {
-    setTimeout(() => {
-      setModalImg(newModalImg);
-      openModal();
-    }, theme.modalTimeOut);
+    setModalImg(newModalImg);
+    toggleModal();
   }
 
   function closeImgModal() {
-    setTimeout(() => {
-      setModalImg({});
-      closeModal();
-    }, theme.modalTimeOut);
+    setModalImg({});
+    toggleModal();
   }
 
   //for modal window to open previous image
@@ -135,17 +118,19 @@ export default function App() {
     setModalImg(nextImage);
   }
 
+  //for auth modal window
   function openAuth() {
-    openModal();
+    toggleModal();
     setIsAuthOpen(true);
   }
 
   function closeAuth() {
-    closeModal();
+    toggleModal();
     setIsAuthOpen(false);
   }
 
-  const isModalOpen = Object.keys(modalImg).length !== 0;
+  //
+  const isImgModalOpen = Object.keys(modalImg).length !== 0;
 
   return (
     <div className="app">
@@ -166,7 +151,7 @@ export default function App() {
       />
 
       {/* Pagination */}
-      {pageCount > 1 && status === STATUS.RESOLVED && (
+      {pageCount > 1 && (
         <PaginationBar
           handlePageClick={handlePageClick}
           pageCount={pageCount}
@@ -174,11 +159,11 @@ export default function App() {
         />
       )}
       {/*Modal*/}
-      {isModalOpen && (
+      {isImgModalOpen && (
         <ImageModal
           largeImageURL={modalImg.largeImageURL}
           tags={modalImg.tags}
-          isModalOpen={isModalOpen}
+          isModalOpen={isImgModalOpen}
           closeModal={closeImgModal}
           className="imageGallery__modal"
           openNextImage={openNextImage}
@@ -186,9 +171,7 @@ export default function App() {
         />
       )}
 
-      {isAuthOpen && (
-        <Authentification className="auth" closeAuth={closeAuth} />
-      )}
+      {isAuthOpen && <Authentication className="auth" closeAuth={closeAuth} />}
 
       {/* For notifications using ReactToastify library */}
       <ToastContainer theme="colored" autoClose={2000} />

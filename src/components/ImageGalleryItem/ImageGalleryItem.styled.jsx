@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import { AiTwotoneStar } from 'react-icons/ai';
 import ImageGalleryItem from './ImageGalleryItem';
 
 const ImageGalleryItemStyled = styled(ImageGalleryItem)`
+  position: relative;
   border-radius: 2px;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
@@ -32,5 +34,21 @@ const ImageGalleryItemStyled = styled(ImageGalleryItem)`
       height: 200px;
     }
   }
+
+  & .imageGallery__firestoreBtn {
+    padding: 0;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: ${({ theme }) => theme.colors.white};
+    border: none;
+    border-radius: ${({ theme }) => theme.borderRadius};
+  }
 `;
 export default ImageGalleryItemStyled;
+
+export const AddToFirestoreIcon = styled(AiTwotoneStar)`
+  fill: ${({ theme }) => theme.colors.accent};
+`;

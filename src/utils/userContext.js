@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { signOut } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import { toast } from 'react-toastify';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from 'utils/firebaseConfig';
 
 //creating context UserContext for auth
 export const UserContext = createContext();
@@ -15,6 +17,7 @@ export function UserProvider({ children }) {
   const [userName, setUserName] = useState('User');
   const [userEmail, setUserEmail] = useState(null);
   const [userId, setUserId] = useState(null);
+  const docRef = [db, 'users', userId];
 
   function logIn(name, email) {
     setIsLoggedIn(true);
@@ -35,6 +38,27 @@ export function UserProvider({ children }) {
     }
   }
 
+  async function addImgToFirestore(imgUrl) {
+    const userData = await getDoc(doc(db, 'users', userId));
+    console.log('userData', userData.data());
+    const userImgArr = userData.data().savedImg ?? [];
+    console.log('userImgArr', userImgArr);
+
+    if (userImgArr.includes(imgUrl)) {
+      toast.warning('This image is already in your favourites!');
+      return;
+    }
+    console.log('updating firestore');
+    await updateDoc(doc(db, 'users', userId), {
+      savedImg: [...userImgArr, imgUrl],
+    });
+    toast.success('Successfully added to your favourites!');
+  }
+
+  async function getSavedImgFromFirestore() {
+    return (await getDoc(doc(...docRef))).data().savedImg ?? [];
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -47,6 +71,8 @@ export function UserProvider({ children }) {
         logOut,
         userId,
         setUserId,
+        addImgToFirestore,
+        getSavedImgFromFirestore,
       }}
     >
       {children}
