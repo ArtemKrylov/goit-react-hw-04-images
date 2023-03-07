@@ -14,11 +14,12 @@ import { Button } from 'components/App/App.styled';
 import { Input } from 'components/Searchbar';
 import { useUser } from 'utils/userContext';
 import { db } from 'utils/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 export default function Authentification({ className, closeAuth }) {
   const [isSignedUpForm, setIsSignedUpForm] = useState(false);
-
   const { logIn, setUserId, setUserName } = useUser();
+  const navigate = useNavigate();
 
   async function register(email, name, password) {
     try {
@@ -29,6 +30,7 @@ export default function Authentification({ className, closeAuth }) {
       );
       const registeredUserId = userRef.user.uid;
       logIn(name, email);
+      navigate('/'); //to home route
       closeAuth();
       toast.success(
         `${name}, you've successfully registered with email: ${email}`
@@ -47,8 +49,6 @@ export default function Authentification({ className, closeAuth }) {
   }
   async function authLogin(email, password) {
     try {
-      //todo get name from firebase
-
       const docRef = await signInWithEmailAndPassword(auth, email, password);
       const loggedUserId = docRef.user.uid;
       setUserId(loggedUserId);
@@ -57,6 +57,7 @@ export default function Authentification({ className, closeAuth }) {
       const name = userData.data().name;
       setUserName(name);
       logIn(name, email);
+      navigate('/'); //to home route
       closeAuth();
       await updateDoc(doc(db, `users`, loggedUserId), {
         lastLogin: new Date(),

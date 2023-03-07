@@ -7,6 +7,7 @@ const IdleGalleryStyled = styled(IdleGallery)`
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  padding-top: 15px;
 
   & .idleGallery__text {
     margin-bottom: 25px;

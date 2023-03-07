@@ -5,13 +5,16 @@ import { ThemeProvider } from 'styled-components';
 import App from 'components/App';
 import { theme } from './constants/theme';
 import { UserProvider } from 'utils/userContext';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.querySelector('#root')).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <UserProvider>
-        <App />
-      </UserProvider>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <UserProvider>
+          <App />
+        </UserProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

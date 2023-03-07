@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { GlobalStyle } from '../GlobalStyle';
 import { SearchbarStyled } from 'components/Searchbar';
@@ -11,6 +12,8 @@ import PaginationBar from 'components/PaginationBar';
 import { STATUS } from 'constants';
 import ImageModal from 'components/ImageModal';
 import Authentication from 'components/Authentication';
+import Home from 'pages/Home';
+import Navbar from 'components/Navbar';
 
 const pixabayAPI = new PixabayAPI();
 
@@ -24,6 +27,7 @@ export default function App() {
   const [status, setStatus] = useState(STATUS.IDLE);
   const [modalImg, setModalImg] = useState({});
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     //adding to localstorage queriesList key which value is [{query: 'query'  , image: 'url'}, ...]
@@ -71,6 +75,7 @@ export default function App() {
 
   function onSearchFormSubmit(newQuery) {
     setQuery(newQuery);
+    navigate('/gallery');
   }
 
   //for pagination page change
@@ -83,6 +88,7 @@ export default function App() {
   //for idle gallery previous searches
   function handleFigureClick(newQuery) {
     setQuery(newQuery);
+    navigate('/gallery');
   }
 
   //for all modal windows - depending opened/closed - controls searchbar position and body styles
@@ -136,30 +142,84 @@ export default function App() {
   return (
     <div className="app">
       <GlobalStyle />
-      <SearchbarStyled
+      {/* Header */}
+      {/* <SearchbarStyled
         onSubmit={onSearchFormSubmit}
         className="searchbar"
         appQuery={query}
         openAuth={openAuth}
         isLogged={isAuthOpen}
-      />
-      <ImageGallery
+      /> */}
+      {/* Navigation */}
+      <Navbar />
+      {/* Routing */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <SearchbarStyled
+              onSubmit={onSearchFormSubmit}
+              className="searchbar"
+              appQuery={query}
+              openAuth={openAuth}
+              isLogged={isAuthOpen}
+            />
+          }
+        >
+          <Route
+            index
+            element={
+              <Home
+                className="idleGallery"
+                handleFigureClick={handleFigureClick}
+              />
+            }
+          />
+          <Route
+            path="gallery"
+            element={
+              <div>
+                <ImageGallery
+                  className="imageGallery"
+                  handleFigureClick={handleFigureClick}
+                  images={images}
+                  status={status}
+                  openModal={openImgModal}
+                  query={query}
+                />
+                {/* Pagination */}
+                {pageCount > 1 && (
+                  <PaginationBar
+                    handlePageClick={handlePageClick}
+                    pageCount={pageCount}
+                    className="paginationBar"
+                  />
+                )}
+              </div>
+            }
+          />
+        </Route>
+      </Routes>
+
+      {/* <ImageGallery
         className="imageGallery"
         handleFigureClick={handleFigureClick}
         images={images}
         status={status}
         openModal={openImgModal}
-      />
+      /> */}
 
       {/* Pagination */}
-      {pageCount > 1 && (
+      {/* {pageCount > 1 && (
         <PaginationBar
           handlePageClick={handlePageClick}
           pageCount={pageCount}
           className="paginationBar"
         />
-      )}
-      {/*Modal*/}
+      )} */}
+
+      {/*Modals*/}
+      {/*Image Modal*/}
       {isImgModalOpen && (
         <ImageModal
           largeImageURL={modalImg.largeImageURL}
@@ -171,7 +231,7 @@ export default function App() {
           openPreviousImage={openPreviousImage}
         />
       )}
-
+      {/*Auth Modal*/}
       {isAuthOpen && <Authentication className="auth" closeAuth={closeAuth} />}
 
       {/* For notifications using ReactToastify library */}

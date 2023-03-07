@@ -13,6 +13,7 @@ import {
 import { useState } from 'react';
 
 import { useUser } from 'utils/userContext';
+import { Outlet } from 'react-router-dom';
 
 export function Searchbar({
   onSubmit,
@@ -57,43 +58,47 @@ export function Searchbar({
   };
 
   return (
-    <header className={className}>
-      <form onSubmit={handleFormSubmit} className="searchbar__form">
-        <div className="searchbar__inputContainer">
-          <ButtonSearch type="submit" className="searchbar__button">
-            <MdOutlineImageSearch
-              fill="#fff"
-              width="20"
-              height="20"
-              className="searchbar__icon"
+    <div>
+      {' '}
+      <header className={className}>
+        <form onSubmit={handleFormSubmit} className="searchbar__form">
+          <div className="searchbar__inputContainer">
+            <ButtonSearch type="submit" className="searchbar__button">
+              <MdOutlineImageSearch
+                fill="#fff"
+                width="20"
+                height="20"
+                className="searchbar__icon"
+              />
+              <span className="button-label">Search</span>
+            </ButtonSearch>
+
+            <Input
+              onChange={handleInputChange}
+              value={query}
+              name="searchQuery"
+              className="searchbar__input"
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
             />
-            <span className="button-label">Search</span>
-          </ButtonSearch>
+          </div>
 
-          <Input
-            onChange={handleInputChange}
-            value={query}
-            name="searchQuery"
-            className="searchbar__input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-          />
-        </div>
-
-        {isLoggedIn ? (
-          <Auth>
-            <p className="searchbar__userName">Hello, {userName} !</p>
-            <LogOutIcon onClick={logOut} />
-          </Auth>
-        ) : (
-          <Auth onClick={openAuth}>
-            <LogInIcon />
-          </Auth>
-        )}
-      </form>
-    </header>
+          {isLoggedIn ? (
+            <Auth>
+              <p className="searchbar__userName">Hello, {userName} !</p>
+              <LogOutIcon onClick={logOut} />
+            </Auth>
+          ) : (
+            <Auth onClick={openAuth}>
+              <LogInIcon />
+            </Auth>
+          )}
+        </form>
+      </header>
+      <Outlet />
+    </div>
   );
 }
 Searchbar.propTypes = {

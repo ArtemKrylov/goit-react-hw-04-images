@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Section from 'components/Section';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import Spinner from 'components/Spinner/Spinner';
-import IdleGallery from 'components/IdleGallery';
+// import IdleGallery from 'components/IdleGallery';
 import { ImageGalleryRejected } from './ImageGallery.styled';
 import { STATUS } from 'constants';
 
@@ -12,15 +12,17 @@ export default function ImageGallery({
   status,
   handleFigureClick,
   openModal,
+  query,
 }) {
   //gallery on first load
   if (status === STATUS.IDLE) {
     return (
       <Section className={className}>
-        <IdleGallery
+        {/* <IdleGallery
           className="idleGallery"
           handleFigureClick={handleFigureClick}
-        />
+        /> */}
+        <h3 className="noQuery">Search something!</h3>
       </Section>
     );
   }
@@ -39,12 +41,18 @@ export default function ImageGallery({
     if (images.length === 0) {
       return (
         <Section className={className}>
-          <h3>No images found</h3>
+          <h3>
+            Searching query: <span>{query}</span>
+          </h3>
+          <p>No images found</p>
         </Section>
       );
     } else {
       return (
         <Section className={className}>
+          <h3 className="imageGallery__query">
+            Searching query: <span>{query}</span>
+          </h3>
           <ul className="imageGallery__list">
             {images.map(image => (
               <ImageGalleryItem
@@ -78,4 +86,5 @@ ImageGallery.propTypes = {
   status: PropTypes.string.isRequired,
   handleFigureClick: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
 };

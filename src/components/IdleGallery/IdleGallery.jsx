@@ -22,7 +22,7 @@ export default function IdleGallery({ className, handleFigureClick }) {
 
   return (
     <div className={className}>
-      <h3 className="idleGallery__text">Search something</h3>
+      {/* <h3 className="idleGallery__text">Search something</h3> */}
 
       {isLoggedIn && <SavedGallery className="saved" images={savedImages} />}
 
