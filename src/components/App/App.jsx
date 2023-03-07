@@ -66,7 +66,8 @@ export default function App() {
     if (query === '') return;
     fetchImages(query, pageSelected);
     scrollToTop();
-  }, [query, pageSelected, pageCount]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, pageSelected]);
 
   function onSearchFormSubmit(newQuery) {
     setQuery(newQuery);
